@@ -1,6 +1,7 @@
 <template>
     <g>
         <circle v-for="point in points" :cx="xScale(point.x)" :cy="yScale(point.y)" r="4" :fill="color" />
+        <slot></slot>
     </g>
 </template>
 <script>

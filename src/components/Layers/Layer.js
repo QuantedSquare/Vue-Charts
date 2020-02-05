@@ -3,8 +3,8 @@ import { min, max } from 'd3'
 export default {
     props: {
         points: {
-            type: Array,
-            required: true
+            type: Array
+            // required: true
         },
         label: String,
         xMin: {
@@ -42,10 +42,10 @@ export default {
     },
     methods: {
         getWidth: function() {
-            return this.$parent.width - this.$parent.right - this.$parent.left;
+            return this.$parent.width - (this.$parent.right || 0) - (this.$parent.left || 0);
         },
         getHeight: function() {
-            return this.$parent.height - this.$parent.top - this.$parent.bottom;
+            return this.$parent.height - (this.$parent.top || 0) - (this.$parent.bottom || 0);
         },
         getMax: function(axis) {
             let fixed = typeof(this[axis + 'Max']) == 'number';
@@ -73,6 +73,12 @@ export default {
         },
         _yMin: function() {
             return this.getMin('y');
+        },
+        width: function() {
+            return this.getWidth();
+        },
+        height: function() {
+            return this.getHeight();
         }
     },
     watch: {

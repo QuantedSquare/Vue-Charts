@@ -1,6 +1,7 @@
 <template>
     <g>
         <rect class="bar" :fill="color" v-for="point in renderedBars" :x="xScale(point.x)" :y="yScale(point.y)" :width="xScale.bandwidth()" :height="positiveOrZero(getHeight() - yScale(point.y))"></rect>
+        <slot></slot>
     </g>
 </template>
 <script>

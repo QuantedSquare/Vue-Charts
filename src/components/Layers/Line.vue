@@ -1,6 +1,7 @@
 <template>
     <g>
         <path class="line" :style="lineStyle" :d="lineDrawer(points)"></path>
+        <slot></slot>
     </g>
 </template>
 <script>

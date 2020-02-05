@@ -55,7 +55,7 @@ export default {
             if (fixed) {
                 maxVal = this[axis + 'Max'];
             } else if (this.collection && this.collection.length) {
-                maxVal = max(this.collection.map(points => max(points, point => point[axis])));
+                maxVal = max(this.collection.map(dataset => max(dataset.points, point => point[axis])));
             }
 
             return maxVal;
@@ -67,7 +67,7 @@ export default {
             if (fixed) {
                 minVal = this[axis + 'Min'];
             } else if (this.collection && this.collection.length) {
-                minVal = min(this.collection.map(points => min(points, point => point[axis])));
+                minVal = min(this.collection.map(dataset => min(dataset.points, point => point[axis])));
             }
 
             return minVal;
