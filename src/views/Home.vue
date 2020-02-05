@@ -5,10 +5,16 @@
         <v-container>
             <v-row justify="center">
                 <v-col cols="8">
+                    <v-chart :collection="randomCollection">
+                        <g v-for="dataset in randomCollection">
+                            <v-line v-bind="dataset"></v-line>
+                            <v-points v-bind="dataset"></v-points>
+                        </g>
+                    </v-chart>
+                </v-col>
+                <v-col cols="8">
                     <v-chart>
                         <v-bars :points="randomPoints"></v-bars>
-                        <v-line :points="randomPoints"></v-line>
-                        <v-points :points="randomPoints"></v-points>
                     </v-chart>
                 </v-col>
             </v-row>
@@ -34,7 +40,8 @@ export default {
     },
     data: function() {
         return {
-            randomPoints: this.getRandomPoints()
+            randomPoints: this.getRandomPoints(),
+            randomCollection: this.getRandomCollection()
         }
     },
     methods: {
@@ -49,6 +56,14 @@ export default {
                     x: xVal,
                     y: this.randomVal(yMin, yMax),
                     label: 'Point ' + (x + 1)
+                }
+            });
+        },
+        getRandomCollection: function(nbPoints = 2, pointsLength, yMin, yMax, isTime) {
+            return new Array(nbPoints).fill().map((l, i) => {
+                return {
+                    points: this.getRandomPoints(pointsLength, yMin, yMax, isTime),
+                    label: 'Points ' + (i + 1)
                 }
             });
         }

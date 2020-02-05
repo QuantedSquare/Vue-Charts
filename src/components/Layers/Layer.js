@@ -6,13 +6,38 @@ export default {
             type: Array,
             required: true
         },
-        xMin: Number,
-        xMax: Number,
-        yMin: Number,
-        yMax: Number,
+        label: String,
+        xMin: {
+            type: Number,
+            default: function() {
+                return this.$parent._xMin
+            }
+        },
+        xMax: {
+            type: Number,
+            default: function() {
+                return this.$parent._xMax
+            },
+        },
+        yMin: {
+            type: Number,
+            default: function() {
+                return this.$parent._yMin
+            },
+        },
+        yMax: {
+            type: Number,
+            default: function() {
+                return this.$parent._yMax
+            },
+        },
         color: {
             type: String,
-            default: '#FF1278'
+            default: function() {
+                if (this.$parent.colorScale && this.label) {
+                    return this.$parent.colorScale(this.label);
+                } else return 'rgb(12, 204, 249)';
+            }
         }
     },
     methods: {

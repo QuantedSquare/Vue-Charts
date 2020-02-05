@@ -18,7 +18,7 @@ export default {
 
         xScale.range([0, this.getWidth()]);
         xScale.domain(this.points.map(point => point.x));
-        // xScale.padding(0.2)
+        xScale.padding(0.2);
 
         yScale.range([this.getHeight(), 0]);
         yScale.domain([this.getMin('y'), yMax]);

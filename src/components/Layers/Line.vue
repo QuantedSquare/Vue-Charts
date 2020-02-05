@@ -22,8 +22,10 @@ export default {
         }
     },
     data: function() {
-        let xScale = scalePoint(),
-            // let xScale = this.isTime ? scaleTime() : scaleLinear(),
+        console.log(this);
+
+        // let xScale = scalePoint(),
+        let xScale = this.isTime ? scaleTime() : scaleLinear(),
             yScale = scaleLinear();
 
         let yMax = this.getMax('y');
@@ -34,9 +36,9 @@ export default {
             .curve(shapes[this.curve]);
 
         xScale.range([0, this.getWidth()]);
-        xScale.domain(this.points.map(point => point.x));
-        xScale.padding(0.5);
-        // xScale.domain([this.getMin('x'), this.getMax('x')]);
+        // xScale.domain(this.points.map(point => point.x));
+        // xScale.padding(0.5);
+        xScale.domain([this.getMin('x'), this.getMax('x')]);
 
         yScale.range([this.getHeight(), 0]);
         yScale.domain([this.getMin('y'), yMax]);
