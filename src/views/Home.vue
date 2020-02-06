@@ -5,10 +5,11 @@
         <v-container>
             <v-row justify="center">
                 <v-col cols="8">
-                    <v-chart :collection="randomCollection">
+                    <v-chart :collection="randomCollection" :right="100">
                         <v-axis axis="x"></v-axis>
                         <v-axis axis="y"></v-axis>
                         <g v-for="dataset in randomCollection">
+                            <v-labels textAnchor="start"></v-labels>
                             <v-line v-bind="dataset"></v-line>
                             <v-points v-bind="dataset"></v-points>
                         </g>
@@ -16,8 +17,9 @@
                 </v-col>
                 <v-col cols="8">
                     <v-chart>
-                        <v-bars :points="randomPoints">
+                        <v-bars :yMin="0" :points="randomPoints">
                             <v-axis axis="x"></v-axis>
+                            <v-labels text="y"></v-labels>
                         </v-bars>
                     </v-chart>
                 </v-col>
@@ -33,6 +35,8 @@ import Bars from '@/components/Layers/Bars.vue'
 import Line from '@/components/Layers/Line.vue'
 import Points from '@/components/Layers/Points.vue'
 import Axis from '@/components/Layers/Axis.vue'
+import Labels from '@/components/Layers/Labels.vue'
+
 
 export default {
     name: 'home',
@@ -42,7 +46,8 @@ export default {
         'v-bars': Bars,
         'v-line': Line,
         'v-points': Points,
-        'v-axis': Axis
+        'v-axis': Axis,
+        'v-labels': Labels
     },
     data: function() {
         return {
@@ -69,7 +74,7 @@ export default {
             return new Array(nbPoints).fill().map((l, i) => {
                 return {
                     points: this.getRandomPoints(pointsLength, yMin, yMax, isTime),
-                    label: 'Points ' + (i + 1)
+                    label: 'Collection ' + (i + 1)
                 }
             });
         }
