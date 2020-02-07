@@ -7,14 +7,20 @@ export default {
             // required: true
         },
         label: String,
+        isTime: {
+            type: Boolean,
+            default: function() {
+                return this.$parent.isTime || false;
+            }
+        },
         xMin: {
-            type: Number,
+            type: [Number, Date],
             default: function() {
                 return this.$parent._xMin
             }
         },
         xMax: {
-            type: Number,
+            type: [Number, Date],
             default: function() {
                 return this.$parent._xMax
             },
@@ -49,13 +55,25 @@ export default {
         },
         getMax: function(axis) {
             let fixed = typeof(this[axis + 'Max']) == 'number';
+            if (!fixed && this[axis + 'Max']) fixed = this[axis + 'Max'].constructor.name == 'Date';
 
-            return fixed ? this[axis + 'Max'] : max(this.points, point => point[axis])
+            if (!fixed) {
+                let maxVal = max(this.points, point => point[axis]);
+                if (this.isTime) maxVal = new Date(maxVal);
+
+                return maxVal;
+            } else return this[axis + 'Max'];
         },
         getMin: function(axis) {
             let fixed = typeof(this[axis + 'Min']) == 'number';
+            if (!fixed && this[axis + 'Min']) fixed = this[axis + 'Min'].constructor.name == 'Date';
 
-            return fixed ? this[axis + 'Min'] : min(this.points, point => point[axis])
+            if (!fixed) {
+                let minVal = min(this.points, point => point[axis]);
+                if (this.isTime) minVal = new Date(minVal);
+
+                return minVal;
+            } else return this[axis + 'Min'];
         },
         positiveOrZero: function(nb) {
             return nb > 0 ? nb : 0;
@@ -82,12 +100,17 @@ export default {
         }
     },
     watch: {
-        '$parent.width': function() {
-            this.xScale.range([0, this.getWidth()]);
+        width: function() {
+            if (this.xScale) {
+                this.xScale.range([0, this.width]);
+                this.$forceUpdate();
+            }
         },
-        '$parent.height': function() {
-            this.yScale.range([this.getHeight(), 0]);
-            this.drawYAxis();
+        height: function() {
+            if (this.yScale) {
+                this.yScale.range([this.height, 0]);
+                this.$forceUpdate();
+            }
         }
     }
 }

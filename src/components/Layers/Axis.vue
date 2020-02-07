@@ -3,7 +3,7 @@
         <line :x1="0" :x2="axis == 'x' ? getWidth() : 0" :y1="getHeight()" :y2="axis == 'y' ? 0 : getHeight()" stroke="black"></line>
         <g v-for="tick in ticks" :transform="getTickPosition(tick)">
             <line :x1="0" :x2="axis == 'x' ? 0 : -5" :y1="0" :y2="axis == 'y' ? 0 : 5" stroke="black"></line>
-            <text :x="axis == 'x' ? 0 : -7" :y="axis == 'y' ? 5 : 20" :text-anchor="axis == 'x' ? 'middle' : 'end'">{{tick}}</text>
+            <text :x="axis == 'x' ? 0 : -7" :y="axis == 'y' ? 5 : 20" :text-anchor="axis == 'x' ? 'middle' : 'end'">{{isTime ? ticksFormat(tick) : tick}}</text>
         </g>
     </g>
 </template>
@@ -19,10 +19,6 @@ export default {
         axis: {
             type: String,
             required: true
-        },
-        isTime: {
-            type: Boolean,
-            default: false
         },
         curve: {
             type: String,
@@ -66,6 +62,9 @@ export default {
             if (this.scale.ticks) {
                 return this.scale.ticks();
             } else return this.scale.domain();
+        },
+        ticksFormat: function() {
+            return this.scale.tickFormat();
         }
     }
 }

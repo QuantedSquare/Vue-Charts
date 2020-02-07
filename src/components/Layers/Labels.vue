@@ -36,6 +36,7 @@ export default {
             return this.$parent[axis + 'Scale'];
         },
         getLabelPosition: function(point) {
+            // console.log('Get Label Position');
             let xMargin = 0;
 
             if (this.xScale.bandwidth) {

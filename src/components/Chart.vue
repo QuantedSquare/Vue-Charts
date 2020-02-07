@@ -11,6 +11,10 @@ import { min, max, scaleOrdinal, interpolateRgbBasis, quantize } from 'd3'
 export default {
     name: 'v-chart',
     props: {
+        isTime: {
+            type: Boolean,
+            default: false
+        },
         height: {
             type: Number,
             default: 480
@@ -68,6 +72,7 @@ export default {
                 minVal = this[axis + 'Min'];
             } else if (this.collection && this.collection.length) {
                 minVal = min(this.collection.map(dataset => min(dataset.points, point => point[axis])));
+
             }
 
             return minVal;
@@ -93,8 +98,10 @@ export default {
             if (this.colors && this.collection) {
                 let colorInterpolator = interpolateRgbBasis(this.colors);
 
+                let quantizeLength = this.collection.length == 1 ? 2 : this.collection.length;
+
                 return scaleOrdinal().domain(this.collection.map(dataset => dataset.label))
-                    .range(quantize(t => colorInterpolator(t), this.collection.length));
+                    .range(quantize(t => colorInterpolator(t), quantizeLength));
             } else return undefined;
         }
     }

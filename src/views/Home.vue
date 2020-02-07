@@ -4,24 +4,34 @@
         <!-- <HelloWorld msg="Welcome to Your Vue.js App"/> -->
         <v-container>
             <v-row justify="center">
-                <v-col cols="8">
-                    <v-chart :collection="randomCollection" :right="100">
-                        <v-axis axis="x"></v-axis>
-                        <v-axis axis="y"></v-axis>
-                        <g v-for="dataset in randomCollection">
-                            <v-labels textAnchor="start"></v-labels>
-                            <v-line v-bind="dataset"></v-line>
-                            <v-points v-bind="dataset"></v-points>
-                        </g>
-                    </v-chart>
+                <v-col cols="10" md="8" lg="7">
+                    <ChartControls>
+                        <template v-slot:default="chartOptions">
+                            <v-chart v-bind="chartOptions" :collection="randomCollection">
+                                <v-axis axis="x" isTime></v-axis>
+                                <v-axis axis="y"></v-axis>
+                                <g v-for="dataset in randomCollection">
+                                    <v-labels textAnchor="start"></v-labels>
+                                    <v-line v-bind="dataset"></v-line>
+                                    <v-points v-bind="dataset" isTime>
+                                        <!-- <v-labels text="y"></v-labels> -->
+                                    </v-points>
+                                </g>
+                            </v-chart>
+                        </template>
+                    </ChartControls>
                 </v-col>
-                <v-col cols="8">
-                    <v-chart>
-                        <v-bars :yMin="0" :points="randomPoints">
-                            <v-axis axis="x"></v-axis>
-                            <v-labels text="y"></v-labels>
-                        </v-bars>
-                    </v-chart>
+                <v-col cols="10" md="8" lg="7">
+                    <ChartControls>
+                        <template v-slot:default="chartOptions">
+                            <v-chart v-bind="chartOptions">
+                                <v-bars :yMin="0" :points="randomPoints">
+                                    <v-axis axis="x"></v-axis>
+                                    <v-labels text="y"></v-labels>
+                                </v-bars>
+                            </v-chart>
+                        </template>
+                    </ChartControls>
                 </v-col>
             </v-row>
         </v-container>
@@ -30,6 +40,7 @@
 <script>
 // @ is an alias to /src
 // import HelloWorld from '@/components/HelloWorld.vue'
+import ChartControls from '@/components/ChartControls.vue'
 import Chart from '@/components/Chart.vue'
 import Bars from '@/components/Layers/Bars.vue'
 import Line from '@/components/Layers/Line.vue'
@@ -47,7 +58,8 @@ export default {
         'v-line': Line,
         'v-points': Points,
         'v-axis': Axis,
-        'v-labels': Labels
+        'v-labels': Labels,
+        ChartControls
     },
     data: function() {
         return {
@@ -60,6 +72,8 @@ export default {
             return min + Math.round(Math.random() * (max - min));
         },
         getRandomPoints: function(length = 10, yMin = 0, yMax = 10, isTime) {
+            let oneDay = 1000 * 60 * 60 * 24;
+
             return new Array(length).fill().map((p, x) => {
                 let xVal = isTime ? (new Date(Date.now() + (x * oneDay))) : x;
 
@@ -70,7 +84,7 @@ export default {
                 }
             });
         },
-        getRandomCollection: function(nbPoints = 2, pointsLength, yMin, yMax, isTime) {
+        getRandomCollection: function(nbPoints = 2, pointsLength, yMin, yMax, isTime = true) {
             return new Array(nbPoints).fill().map((l, i) => {
                 return {
                     points: this.getRandomPoints(pointsLength, yMin, yMax, isTime),

@@ -1,6 +1,6 @@
 <template>
     <g>
-        <path class="line" :style="lineStyle" :d="lineDrawer(points)"></path>
+        <path :style="lineStyle" :d="lineDrawer(points)"></path>
         <slot></slot>
     </g>
 </template>
@@ -13,10 +13,6 @@ export default {
     name: 'v-line',
     mixins: [Layer],
     props: {
-        isTime: {
-            type: Boolean,
-            default: false
-        },
         curve: {
             type: String,
             default: 'curveLinear'

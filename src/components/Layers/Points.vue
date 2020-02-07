@@ -1,6 +1,6 @@
 <template>
     <g>
-        <circle v-for="point in points" :cx="xScale(point.x)" :cy="yScale(point.y)" r="4" :fill="color" />
+        <circle v-for="point in points" :cx="xScale(point.x)" :cy="yScale(point.y)" :r="r" :fill="color" />
         <slot></slot>
     </g>
 </template>
@@ -15,20 +15,13 @@ export default {
         r: {
             type: Number,
             default: 4
-        },
-        isTime: {
-            type: Boolean,
-            default: false
-        },
+        }
     },
     data: function() {
-        // let xScale = scalePoint(),
         let xScale = this.isTime ? scaleTime() : scaleLinear(),
             yScale = scaleLinear();
 
         xScale.range([0, this.getWidth()]);
-        // xScale.domain(this.points.map(point => point.x));
-        // xScale.padding(0.5);
         xScale.domain([this.getMin('x'), this.getMax('x')]);
 
         yScale.range([this.getHeight(), 0]);
@@ -36,7 +29,7 @@ export default {
 
         return {
             xScale: xScale,
-            yScale: yScale
+            yScale: yScale,
         }
     }
 }
