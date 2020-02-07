@@ -1,10 +1,11 @@
 {
   "name": "vue-charts",
-  "version": "0.1.0",
+  "version": "0.9.0",
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "build-lib": "vue-cli-service build  --report --target lib --name quantedsquare-viz --dest lib/dist lib/wrapper.js"
   },
   "dependencies": {
     "core-js": "^3.4.4",
