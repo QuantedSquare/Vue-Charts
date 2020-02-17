@@ -19,7 +19,7 @@ export default {
         }
     },
     data: function() {
-        console.log(this);
+        // console.log(this);
 
         // let xScale = scalePoint(),
         let xScale = this.isTime ? scaleTime() : scaleLinear(),
