@@ -8,7 +8,7 @@
                     <ChartControls>
                         <template v-slot:default="chartOptions">
                             <v-chart v-bind="chartOptions" :collection="randomCollection">
-                                <v-map :topology="mapData">
+                                <v-map :topology="mapData" featuresKey="FRA">
                                 </v-map>
                             </v-chart>
                         </template>

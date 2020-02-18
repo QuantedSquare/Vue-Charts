@@ -1,7 +1,7 @@
 <template>
     <g>
         <line :x1="0" :x2="axis == 'x' ? getWidth() : 0" :y1="getHeight()" :y2="axis == 'y' ? 0 : getHeight()" stroke="black"></line>
-        <g v-for="tick in ticks" :transform="getTickPosition(tick)">
+        <g v-for="tick in ticks()" :transform="getTickPosition(tick)">
             <line :x1="0" :x2="axis == 'x' ? 0 : -5" :y1="0" :y2="axis == 'y' ? 0 : 5" stroke="black"></line>
             <text :x="axis == 'x' ? 0 : -7" :y="axis == 'y' ? 5 : 20" :text-anchor="axis == 'x' ? 'middle' : 'end'">{{isTime ? ticksFormat(tick) : tick}}</text>
         </g>
@@ -19,10 +19,24 @@ export default {
         axis: {
             type: String,
             required: true
-        },
-        curve: {
-            type: String,
-            default: 'curveLinear'
+        }
+    },
+    data: function() {
+        let scale = this.getParentScale();
+
+        if (!scale) {
+            scale = this.isTime ? scaleTime() : scaleLinear();
+
+            if (this.axis == 'x') {
+                scale.range([0, this.getWidth()]);
+            } else scale.range([this.getHeight(), 0]);
+
+            scale.domain([this.getMin(this.axis), this.getMax(this.axis)]);
+        }
+
+        return {
+            scale: scale,
+            ticksFormat: scale.tickFormat()
         }
     },
     methods: {
@@ -40,32 +54,26 @@ export default {
                 y = this.axis == 'y' ? this.scale(tick) : this.getHeight();
 
             return `translate(${x}, ${y})`
-        }
-    },
-    computed: {
-        scale: function() {
-            let parentScale = this.getParentScale();
-
-            if (!parentScale) {
-                let scale = this.isTime ? scaleTime() : scaleLinear();
-
-                if (this.axis == 'x') {
-                    scale.range([0, this.getWidth()]);
-                } else scale.range([this.getHeight(), 0]);
-
-                scale.domain([this.getMin(this.axis), this.getMax(this.axis)]);
-
-                return scale;
-            } else return parentScale;
         },
         ticks: function() {
             if (this.scale.ticks) {
                 return this.scale.ticks();
             } else return this.scale.domain();
         },
-        ticksFormat: function() {
-            return this.scale.tickFormat();
+        updateDomain: function() {
+            if (!this.getParentScale()) {
+                this.scale.domain([this.getMin(this.axis), this.getMax(this.axis)]);
+            }
+
+            if (this.scale.ticksFormat) this.ticksFormat = this.scale.ticksFormat();
+            this.$forceUpdate();
         }
+    },
+    watch: {
+        _xMax: function() { this.updateDomain() },
+        _xMin: function() { this.updateDomain() },
+        _yMax: function() { this.updateDomain() },
+        _yMin: function() { this.updateDomain() }
     }
 }
 </script>

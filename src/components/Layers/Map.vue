@@ -1,7 +1,7 @@
 <template>
     <g>
-        <path :d="geoDrawer(getFeatures())" :style="mapStyle"></path>
-        <slot></slot>
+        <path v-if="display" :d="geoDrawer(getFeatures())" :style="mapStyle"></path>
+        <slot v-bind="{geoProjection}"></slot>
     </g>
 </template>
 <script>
@@ -19,15 +19,23 @@ export default {
         projection: {
             type: String,
             default: 'geoOrthographic'
+        },
+        featuresKey: {
+            required: true,
+            type: String
+        },
+        display: {
+            type: Boolean,
+            default: true
         }
     },
     data: function() {
-        let geoProjection = projections[this.projection](),
+        let geoProjection = this.$parent.geoProjection || projections[this.projection](),
             geoDrawer = geoPath();
 
         // console.log(this.getFeatures(), this.width, this.height);
 
-        geoProjection.fitSize([this.getWidth(), this.getHeight()], this.getFeatures());
+        if (!this.$parent.geoProjection) geoProjection.fitSize([this.getWidth(), this.getHeight()], this.getFeatures());
         // geoProjection.rotate([, 0, 0])
         // console.log(geoProjection.rotate());
 
@@ -36,12 +44,13 @@ export default {
 
         return {
             geoDrawer: geoDrawer,
-            geoProjection: geoProjection
+            geoProjection: geoProjection,
+            isMap: true
         }
     },
     methods: {
         getFeatures: function() {
-            return topojson.feature(this.topology, 'FRA');
+            return topojson.feature(this.topology, this.featuresKey);
         }
     },
     computed: {
@@ -55,11 +64,11 @@ export default {
     },
     watch: {
         width: function() {
-            this.geoProjection.fitSize([this.getWidth(), this.getHeight()], this.getFeatures());
+            if (!this.$parent.geoProjection) this.geoProjection.fitSize([this.getWidth(), this.getHeight()], this.getFeatures());
             this.$forceUpdate();
         },
         height: function() {
-            this.geoProjection.fitSize([this.getWidth(), this.getHeight()], this.getFeatures());
+            if (!this.$parent.geoProjection) this.geoProjection.fitSize([this.getWidth(), this.getHeight()], this.getFeatures());
             this.$forceUpdate();
         }
     }
