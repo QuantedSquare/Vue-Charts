@@ -36,7 +36,7 @@ export default {
 
         return {
             scale: scale,
-            ticksFormat: scale.tickFormat()
+            ticksFormat: scale.tickFormat ? scale.tickFormat() : undefined
         }
     },
     methods: {

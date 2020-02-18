@@ -34,10 +34,10 @@
                         </g>
                     </v-chart>
                     <v-chart>
-                        <!-- <v-bars :yMin="0" :points="randomPoints">
+                        <v-bars :yMin="0" :points="randomPoints">
                             <v-axis axis="x"></v-axis>
                             <v-labels text="y"></v-labels>
-                        </v-bars> -->
+                        </v-bars>
                     </v-chart>
                 </v-col>
             </v-row>
